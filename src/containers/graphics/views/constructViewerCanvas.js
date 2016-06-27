@@ -201,7 +201,7 @@ export class ConstructViewerCanvas extends Component {
 
     // map construct viewers so we can propagate projectId and any recently dropped blocks
     return (
-      <div className="ProjectPage-constructs no-vertical-scroll" onClick={this.onClick}>
+      <div className="ProjectPage-constructs no-vertical-scroll" onClick={this.onClick} tabIndex={-1}>
         <div className={dropClasses} ref="dropTarget" key="dropTarget">Drop blocks here to create a new construct.</div>;
         {constructViewers}
       </div>

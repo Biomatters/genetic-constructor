@@ -44,6 +44,11 @@
   box-sizing: border-box;
 }
 
+/* container for all project page constructs */
+.ProjectPage-constructs {
+  outline: none;
+}
+
 /* overlaid panel for handling mouse inputs and displaying overlaid UI affordances/glyphs */
 .scenegraph-userinterface {
   position: absolute;
@@ -52,6 +57,7 @@
   transform-origin: 0 0;
   background-color: transparent;
   cursor: default;
+  outline: none;
 
   .scenegraph-userinterface-selection {
     position: absolute;

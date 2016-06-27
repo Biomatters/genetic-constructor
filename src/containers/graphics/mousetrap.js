@@ -87,6 +87,8 @@ export default class MouseTrap {
     if (event.which !== 1) {
       return;
     }
+    // always focus elements on mouse down
+    this.element.focus();
     // get local position and record the starting position and setup
     // move/up handlers on the body
     const localPosition = new Vector2D(event.offsetX, event.offsetY);

@@ -10,6 +10,8 @@ export default class UserInterface {
     // build our element
     this.el = document.createElement('div');
     this.el.className = 'scenegraph-userinterface';
+    // can not be tabbed to, but can get programmatic focus
+    this.el.setAttribute('tabindex', -1);
     // append after our scenegraph
     this.sg.parent.parentNode.insertBefore(this.el, this.sg.parent.nextSibiling);
     // base class can handle simple selections based on the AABB of nodes

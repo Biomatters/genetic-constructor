@@ -10,7 +10,6 @@ module.exports = {
     // maximize for graphical tests
     browser.windowSize('current', 2000, 1100);
     homepageRegister(browser);
-    newProject(browser);
     openTemplatesSample(browser);
     browser
       .saveScreenshot('./test-e2e/current-screenshots/templates-open.png')

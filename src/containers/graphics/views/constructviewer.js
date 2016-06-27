@@ -21,6 +21,7 @@ import {
   uiToggleDetailView,
   inspectorToggleVisibility,
   uiShowOrderForm,
+  uiSpin,
 } from '../../../actions/ui';
 import {
   orderCreate,
@@ -80,6 +81,7 @@ export class ConstructViewer extends Component {
     blockDetach: PropTypes.func,
     uiShowDNAImport: PropTypes.func,
     uiShowOrderForm: PropTypes.func.isRequired,
+    uiSpin: PropTypes.func.isRequired,
     orderCreate: PropTypes.func.isRequired,
     orderGenerateConstructs: PropTypes.func.isRequired,
     orderList: PropTypes.func.isRequired,
@@ -613,6 +615,7 @@ export default connect(mapStateToProps, {
   inspectorToggleVisibility,
   uiShowDNAImport,
   uiShowOrderForm,
+  uiSpin,
   uiToggleDetailView,
   orderCreate,
   orderGenerateConstructs,

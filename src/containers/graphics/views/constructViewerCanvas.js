@@ -19,6 +19,7 @@ import DnD from '../dnd/dnd';
 import ConstructViewer from './constructviewer';
 import MouseTrap from '../mousetrap';
 import { block as blockDragType } from '../../../constants/DragTypes';
+import { delay } from 'lodash';
 
 import '../../../styles/constructviewercanvas.css';
 
@@ -44,6 +45,7 @@ export class ConstructViewerCanvas extends Component {
    * create a new construct, add dropped block to it
    */
   onDrop(globalPosition, payload, event) {
+    this.props.uiSpin('Adding construct...');
     // clone construct and add to project if a construct from inventory otherwise
     // treat as a list of one or more blocks
     //if the block is from the inventory, we've cloned it and dont need to worry about forcing the projectId when we add the components
@@ -61,6 +63,7 @@ export class ConstructViewerCanvas extends Component {
       constructViewer.addItemAtInsertionPoint(payload, null, null);
       this.props.focusConstruct(construct.id);
     }
+    this.props.uiSpin();
   }
 
   /**

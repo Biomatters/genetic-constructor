@@ -27,7 +27,7 @@ export default class ConstructViewerUserInterface extends UserInterface {
       dragLeave: this.onDragLeave.bind(this),
       dragOver: this.onDragOver.bind(this),
       drop: this.onDrop.bind(this),
-      
+
       zorder: 0,
     });
 
@@ -655,10 +655,12 @@ export default class ConstructViewerUserInterface extends UserInterface {
       return;
     }
 
+    this.constructViewer.props.uiSpin('Inserting block...');
     // flatten dropped object and treats as new construct if we are empty.
     const blockids = this.constructViewer.addItemAtInsertionPoint(payload, this.insertion, event);
     this.constructViewer.constructSelected(this.constructViewer.props.constructId);
     this.constructViewer.blockSelected(blockids);
+    this.constructViewer.props.uiSpin();
   }
   /**
    * show the insertion point at the top left of an empty construct.

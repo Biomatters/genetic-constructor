@@ -146,16 +146,6 @@ export class ConstructViewer extends Component {
     // handle window resize to reflow the layout
     this.resizeDebounced = debounce(this.windowResized.bind(this), 5);
     window.addEventListener('resize', this.resizeDebounced);
-
-    // if there is no focused construct then we should grab it
-    // NOTE: For now this is disabled because it often does not product the desired result
-    // and can move the page beyind the scroll limits set.
-    if (!this.props.focus.constructId) {
-      this.props.focusConstruct(this.props.constructId);
-      //ReactDOM.findDOMNode(this).scrollIntoView();
-    } else {
-      //ReactDOM.findDOMNode(this).scrollIntoView();
-    }
   }
 
   shouldComponentUpdate(props, nextProps) {
@@ -165,18 +155,9 @@ export class ConstructViewer extends Component {
   }
 
   /**
-   * scroll into view if needed and update scenegraph
-   * @param  {[type]} prevProps [description]
-   * @return {[type]}           [description]
+   * update scenegraph
    */
   componentDidUpdate(prevProps) {
-    // if we are newly focused then scroll ourselves into view
-    // const oldFocus = prevProps.construct.id === prevProps.focus.construct;
-    // const newFocus = this.props.construct.id === this.props.focus.construct;
-    // if (!oldFocus && newFocus) {
-    //   const dom = ReactDOM.findDOMNode(this);
-    //   dom.scrollIntoView();
-    // }
     this.update();
   }
 
@@ -367,7 +348,7 @@ export class ConstructViewer extends Component {
     return [
       {
         text: 'Inspect Block',
-        disabled: this.props.focus.blockIds.length !== 1,
+        disabled: this.props.focus.blockIds.length !== 1 || this.props.inspectorVisible,
         action: () => {
           this.openInspector();
         },
@@ -413,6 +394,7 @@ export class ConstructViewer extends Component {
           this.props.focusBlocks([]);
           this.props.focusConstruct(this.props.constructId);
         },
+        disabled: this.props.inspectorVisible,
       },
       {
         text: `Delete ${typeName}`,
@@ -626,6 +608,7 @@ function mapStateToProps(state, props) {
     focus: state.focus,
     construct: state.blocks[props.constructId],
     blocks: state.blocks,
+    inspectorVisible: state.ui.inspector.isVisible
   };
 }
 

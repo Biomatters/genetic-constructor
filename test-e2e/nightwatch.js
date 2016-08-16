@@ -70,6 +70,8 @@ module.exports = {
         browserName: 'internet explorer',
         platform: 'Windows 10',
         version: '11.0',
+        javascriptEnabled: true,
+        acceptSslCerts: true,
       },
     },
   },

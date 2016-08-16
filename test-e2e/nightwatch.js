@@ -21,7 +21,7 @@ module.exports = {
   },
 
   test_settings: {
-    default: {
+    local: {
       launch_url: 'http://localhost:3001/',
       selenium_port: 4444,
       selenium_host: 'localhost',
@@ -37,7 +37,7 @@ module.exports = {
       },
     },
 
-    sauce: {
+    default: {
       launch_url: 'http://ondemand.saucelabs.com:80',
       selenium_port: 80,
       selenium_host: 'ondemand.saucelabs.com',

@@ -34,6 +34,9 @@ module.exports = {
         browserName: 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
+        chromeOptions: {
+          args: ['incognito'],
+        },
       },
     },
 
@@ -62,6 +65,9 @@ module.exports = {
         browserName: 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
+        chromeOptions: {
+          args: ['incognito'],
+        },
       },
     },
 
@@ -72,6 +78,7 @@ module.exports = {
         version: '11.0',
         javascriptEnabled: true,
         acceptSslCerts: true,
+        'ie.ensureCleanSession': true,
       },
     },
   },

@@ -24,7 +24,7 @@ install:
 script:
 - npm run lint
 - npm run test
-- npm run start-instance
+- npm run start-auth-stack-testing
 - npm run nightwatch-saucelabs
 - pkill node
 cache:

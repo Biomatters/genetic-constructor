@@ -1,5 +1,5 @@
-import { exec, spawn } from 'child_process';
 import path from 'path';
+import { promisedExec, spawnWaitUntilString } from './processUtils';
 
 //todo - have a check to make sure docker is running
 
@@ -25,81 +25,6 @@ process.argv.forEach((val, index) => {
   }
 });
 console.log('path for bio-user-platform is ' + pathBioNanoPlatform + '. Set by passing --PLATFORM_PATH=/your/path');
-
-/** command utils **/
-
-//simple wrap around console.log
-const log = (output = '', forceOutput = false) => {
-  if (DEBUG || forceOutput === true) {
-    console.log(output.trim());
-  }
-};
-
-const promisedExec = (cmd, opts, {
-  forceOutput = false,
-} = {}) => {
-  console.log('running ' + cmd);
-
-  return new Promise((resolve, reject) => {
-    exec(cmd, opts, (err, stdout, stderr) => {
-      if (err) {
-        console.error(err);
-        return reject(err);
-      }
-
-      //`` to convert from buffers
-      if (stdout) {
-        log(`${stdout}`, forceOutput);
-      }
-      if (stderr) {
-        log(`${stderr}`, forceOutput);
-      }
-
-      return resolve(`${stdout}`, `${stderr}`);
-    });
-  });
-};
-
-const spawnWaitUntilString = (cmd, args, opts, {
-  waitUntil = `${Math.random()}`,
-  forceOutput = false,
-  failOnStderr = false,
-} = {}) => {
-  console.log('\nrunning: ' + cmd + ' ' + args.join(' '));
-
-  return new Promise((resolve, reject) => {
-    //const [ command, ...args ] = cmd.split(' ');
-    const process = spawn(cmd, args, opts);
-
-    process.stdout.on('data', data => {
-      log(`${data}`, forceOutput);
-      if (`${data}`.indexOf(waitUntil) >= 0) {
-        resolve(process);
-      }
-    });
-
-    process.stderr.on('data', data => {
-      log(`${data}`, true);
-      if (`${data}`.indexOf(waitUntil) >= 0) {
-        return resolve(process);
-      }
-      if (failOnStderr === true) {
-        console.log('REJECTING');
-        process.kill();
-        reject(process);
-      }
-    });
-
-    process.on('error', (err) => {
-      console.log('Error in process');
-      console.log(err);
-    });
-
-    process.on('close', (code) => {
-      log(`child process exited with code ${code}`, forceOutput);
-    });
-  });
-};
 
 /** scripts **/
 

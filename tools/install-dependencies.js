@@ -18,7 +18,7 @@ import { promisedExec, spawnWaitUntilString } from './processUtils';
 
 async function installDependencies() {
   try {
-    await promisedExec('pip install --user biopython');
+    await promisedExec('pip install --user biopython', {}, { forceOutput: true});
     //todo - need to handle sudo here
     /* await promisedExec('./install-fsharp.sh', {
       cwd: __dirname,

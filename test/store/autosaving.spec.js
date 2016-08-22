@@ -19,9 +19,11 @@ describe('Store', () => {
       }
     };
 
-    const throttleTime = 30;
-    const waitTime = 13;
+    const throttleTime = 16;
+    const waitTime = 7;
+    const fudge = 3;
     assert(throttleTime > waitTime * 2, 'wait time must be less than throttle time');
+    assert(fudge < waitTime / 2, 'fudge time must be less than wait time');
 
     const saveSpy = sinon.spy();
     const forceSaveActionType = 'FORCE_SAVE';
@@ -76,7 +78,7 @@ describe('Store', () => {
         expect(saveSpy.callCount).to.equal(callCount + 1);
 
         setTimeout(done, throttleTime); //make sure throttle ends
-      }, waitTime);
+      }, waitTime + fudge);
     });
 
     it('marks dirty when in between throttles', (done) => {
@@ -106,8 +108,8 @@ describe('Store', () => {
           assert(!isDirty(), 'not dirty after throttle over');
           expect(saveSpy.callCount).to.equal(callCount + 2);
           done();
-        }, throttleTime + 3);
-      }, waitTime + 3);
+        }, throttleTime + fudge);
+      }, waitTime + fudge);
     });
 
     it('doesnt block state changes for saves', () => {
@@ -178,8 +180,8 @@ describe('Store', () => {
           assert(!autosave.isDirty(), 'not dirty after throttle');
           expect(coordinatingSpy.callCount).to.equal(2);
           done();
-        }, savingTime + 3);
-      }, waitingTime + 3);
+        }, savingTime + fudge);
+      }, waitingTime + fudge);
     });
   });
 });

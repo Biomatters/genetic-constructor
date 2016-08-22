@@ -79,6 +79,8 @@ async function auth() {
     await startRunAuth();
   } catch (err) {
     console.log('CAUGHT', err);
+    console.log(err.stack);
+    process.exit(1);
     throw err;
   }
 }

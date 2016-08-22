@@ -17,9 +17,6 @@ RUN apt-get update && \
 	sudo apt-get -y install nodejs && \
 	apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#everything needed by extensions
-RUN yes | pip install biopython
-
 RUN pip install awscli
 
 EXPOSE 3000
@@ -33,8 +30,6 @@ ADD package.json /app/package.json
 RUN npm update -g npm && npm install
 
 ADD . /app
-#install extensions, continue even if errors
-RUN npm run install-extensions || true
 
 RUN cd /app
 

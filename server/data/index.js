@@ -31,6 +31,8 @@ import { permissionsMiddleware } from './permissions';
 
 import projectFileRouter from './projectFileRouter';
 
+import models from '../sql/models/index';
+
 const router = express.Router(); //eslint-disable-line new-cap
 const jsonParser = bodyParser.json({
   strict: false, //allow values other than arrays and objects,
@@ -174,6 +176,8 @@ router.route('/info/:type/:detail?/:additional?')
     }
   });
 
+router.route('/')
+
 /* rollups */
 // routes for non-atomic operations
 // response/request with data in rollup format {project: {}, blocks: {}, ...}
@@ -215,6 +219,23 @@ router.route('/projects')
       .then(metadatas => res.status(200).json(metadatas))
       .catch(err => next(err));
   });
+
+/**
+ * HACK test creating a user ===================================================
+ */
+router.route('/createuser/:email/:username/:password')
+  .all(jsonParser)
+  .get((req, res, next) => {
+    const email = req.param('email');
+    const username = req.param('username');
+    const password = req.param('password');
+    models.User.create({email, username, password,})
+      .then(function(user) {
+        res.json(user);
+      });
+  });
+
+// =============================================================================
 
 /* versioning */
 

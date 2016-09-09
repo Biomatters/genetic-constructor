@@ -185,7 +185,7 @@ const startServer = () => app.listen(port, hostname, (err) => {
 });
 
 // sync sequelize models and start server
-models.sequelize.sync().then(function() {
+models.sequelize.sync({force: true}).then(function() {
   //start the server by default, if port is not taken
   isPortFree(port, (err, free) => free && startServer());
 });

@@ -26,6 +26,7 @@ import reportRouter from './report/index';
 import bodyParser from 'body-parser';
 import errorHandlingMiddleware from './utils/errorHandlingMiddleware';
 import checkUserSetup from './auth/userSetup';
+import models from './sql/models/index';
 
 const DEFAULT_PORT = 3000;
 const port = parseInt(process.argv[2], 10) || process.env.PORT || DEFAULT_PORT;
@@ -183,7 +184,10 @@ const startServer = () => app.listen(port, hostname, (err) => {
   console.log(`Server listening at http://${hostname}:${port}/`);
 });
 
-//start the server by default, if port is not taken
-isPortFree(port, (err, free) => free && startServer());
+// sync sequelize models and start server
+models.sequelize.sync().then(function() {
+  //start the server by default, if port is not taken
+  isPortFree(port, (err, free) => free && startServer());
+});
 
 export default app;

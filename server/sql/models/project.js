@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // create one to many relationship
+        Project.belongsTo(models.User);
       }
     }
   });

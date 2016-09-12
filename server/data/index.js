@@ -235,6 +235,46 @@ router.route('/createuser/:email/:username/:password')
       });
   });
 
+router.route('/getuser/:username')
+  .all(jsonParser)
+  .get((req, res, next) => {
+    const email = req.param('email');
+    const username = req.param('username');
+    const password = req.param('password');
+    models.User.findOne({
+      where: {username}
+    })
+      .then(function(user) {
+        res.json(user);
+      });
+  });
+
+router.route('/getprojects/:userid')
+  .all(jsonParser)
+  .get((req, res, next) => {
+    const userid = req.param('userid');
+    models.Project.findAll({
+      where: {UserId: userid}
+    })
+      .then(function(projects) {
+        res.json(projects);
+      });
+  });
+
+router.route('/createproject/:userid/:projectname')
+  .all(jsonParser)
+  .get((req, res, next) => {
+    const userid = req.param('userid');
+    const projectname = req.param('projectname');
+    models.Project.create({
+      name: projectname,
+      UserId: userid,
+    })
+      .then(function(project) {
+        res.json(project);
+      });
+  });
+
 // =============================================================================
 
 /* versioning */

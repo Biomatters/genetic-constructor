@@ -245,7 +245,7 @@ router.route('/getuser/:username')
       where: {username}
     })
       .then(function(user) {
-        res.json(user);
+        res.json(user); 
       });
   });
 

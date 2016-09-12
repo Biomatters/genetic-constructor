@@ -17,8 +17,8 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // create one to many relationship
-        User.hasMany(models.Project);
+        // has many projects that should be deleted when the user is deleted
+        User.hasMany(models.Project, { onDelete: 'cascade' });
       }
     }
   });

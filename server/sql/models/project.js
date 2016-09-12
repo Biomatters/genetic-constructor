@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Project.belongsTo(models.User);
+        Project.belongsTo(models.User, { onDelete: 'cascade' });
       }
     }
   });

@@ -249,6 +249,18 @@ router.route('/getuser/:username')
       });
   });
 
+  router.route('/deleteuser/:userid')
+    .all(jsonParser)
+    .get((req, res, next) => {
+      const userid = req.param('userid');
+      models.User.destroy({
+        where: {id: userid}
+      })
+        .then(function() {
+          res.json(arguments);
+        });
+    });
+
 router.route('/getprojects/:userid')
   .all(jsonParser)
   .get((req, res, next) => {

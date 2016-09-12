@@ -1,6 +1,9 @@
 module.exports = function(sequelize, DataTypes) {
   var Project = sequelize.define("Project", {
-    name: DataTypes.STRING
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
   }, {
     classMethods: {
       associate: function(models) {

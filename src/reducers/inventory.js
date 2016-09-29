@@ -42,7 +42,7 @@ const createSourcesVisible = (valueFunction = () => false, sourceList = getSourc
 };
 
 const searchSources = getSources('search');
-const initialSearchSources = getLocal('searchSources') ? getLocal('searchSources').split(',') : searchSources;
+const initialSearchSources = getLocal('searchSources') ? getLocal('searchSources') : searchSources;
 const defaultSearchResults = createEmptySearchResults(searchSources);
 
 export const initialState = {

@@ -18,6 +18,7 @@ import fs from 'fs';
 import express from 'express';
 import morgan from 'morgan';
 
+import mongoConnect from './data/mongoClient';
 import { registrationHandler } from './user/updateUserHandler';
 import userRouter from './user/userRouter';
 import dataRouter from './data/index';
@@ -185,15 +186,20 @@ const isPortFree = (port, cb) => {
     });
 };
 
-const startServer = () => app.listen(HOST_PORT, HOST_NAME, (err) => {
-  if (err) {
-    console.log('error listening!', err.stack);
-    return;
-  }
+const startServer = () => {
+  mongoConnect()
+    .then(() => {
+      app.listen(HOST_PORT, HOST_NAME, (err) => {
+        if (err) {
+          console.log('error listening!', err.stack);
+          return;
+        }
 
-  /* eslint-disable no-console */
-  console.log(`Server listening at http://${HOST_NAME}:${HOST_PORT}/`);
-});
+        /* eslint-disable no-console */
+        console.log(`Server listening at http://${HOST_NAME}:${HOST_PORT}/`);
+      });
+    });
+};
 
 //start the server by default, if port is not taken
 isPortFree(HOST_PORT, (err, free) => free && startServer());

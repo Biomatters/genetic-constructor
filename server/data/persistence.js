@@ -36,6 +36,7 @@ import {
   directoryMove,
 } from '../utils/fileSystem';
 import * as permissions from './permissions';
+import mongoConnect from './mongoClient';
 
 /*********
  Helpers
@@ -504,31 +505,52 @@ export const projectSnapshot = (projectId, userId, messageAddition) => {
   return _projectCommit(projectId, userId, message);
 };
 
-//sequence
+/******* sequence ******/
+//sequences use mongo rather than files directly
+
+//todo - make this nicer. make chainable
+const sequenceCollection = () => mongoConnect().then(db => db.collection('sequences'));
+
+//create index (idempotent)
+sequenceCollection().then(conn => conn.createIndex({md5: 1}));
 
 export const sequenceExists = (md5) => {
-  const sequencePath = filePaths.createSequencePath(md5);
-  return fileExists(sequencePath)
-    .then(() => sequencePath);
+  return sequenceCollection()
+    .then(conn => conn.findOne({ md5 }))
+    .catch(err => Promise.reject(errorDoesNotExist));
+  //todo - verify
 };
 
 export const sequenceGet = (md5) => {
-  return sequenceExists(md5)
-    .then(path => fileRead(path, false));
+  return sequenceCollection()
+    .then(conn => conn.findOne({ md5 }))
+    .then(doc => doc.sequence)
+    .catch(err => Promise.reject(errorDoesNotExist));
 };
 
-export const sequenceWrite = (md5, sequence, blockId, projectId) => {
-  const sequencePath = filePaths.createSequencePath(md5);
+export const sequenceWrite = (md5, sequence) => {
+  return sequenceCollection()
+    .then(conn => conn.insertOne({ md5, sequence }));
+};
 
-  //only write if it doesnt exist
-  return fileExists(sequencePath)
-    .catch(() => fileWrite(sequencePath, sequence, false))
-    .then(() => sequence);
+//todo - use in importing middleware
+//expects map of md5: sequence
+export const sequenceWrites = (map) => {
+  const mapped = Object.keys(map).reduce((acc, md5) => {
+    acc.push({
+      md5,
+      sequence: map[md5],
+    });
+  }, []);
+
+  return sequenceCollection()
+    .then(conn => conn.insertMany(mapped))
+    .then(() => map);
 };
 
 //probably dont want to let people do this, since sequence may be referenced by multiple blocks...
 export const sequenceDelete = (md5) => {
-  return sequenceExists(md5)
-    .then(path => fileDelete(path));
+  return sequenceCollection()
+    .then(conn => conn.findOne({ md5 }).deleteOne())
+    .catch(err => Promise.reject(errorDoesNotExist));
 };
-

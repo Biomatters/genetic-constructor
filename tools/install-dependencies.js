@@ -13,9 +13,14 @@
 
 import { promisedExec, spawnWaitUntilString } from './processUtils';
 
+const MONGODB_VERSION = '3.2.9';
+
 async function installDependencies() {
   try {
     await promisedExec('pip install --user biopython', {}, { forceOutput: true});
+
+    await installMongo();
+
     //todo - need to handle sudo here
     /* await promisedExec('./install-fsharp.sh', {
      cwd: __dirname,

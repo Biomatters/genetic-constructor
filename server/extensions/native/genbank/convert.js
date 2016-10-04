@@ -3,6 +3,7 @@ import md5 from 'md5';
 import invariant from 'invariant';
 import _, { merge, chunk, cloneDeep } from 'lodash';
 import uuid from 'node-uuid';
+import os from 'os';
 import { fork } from 'child_process';
 
 import * as filePaths from '../../../utils/filePaths';
@@ -22,7 +23,7 @@ const createTempFilePath = () => filePaths.createStorageUrl('temp/' + uuid.v4())
 
 //todo - will need to consider bundling
 //one process for each core, besides the main core
-const numCores = Math.min(1, process.os.cpus().length - 1);
+const numCores = Math.max(1, os.cpus().length - 1);
 const forks = _.range(numCores).map(() => fork(`${__dirname}/convertChild.js`, { cwd: __dirname }));
 let coreIndex = 0;
 

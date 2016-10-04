@@ -21,19 +21,20 @@ const timer = new DebugTimer('Genbank', { delayed: true });
 const createTempFilePath = () => filePaths.createStorageUrl('temp/' + uuid.v4());
 
 //todo - will need to consider bundling
-//one process for each
-const importFork = fork(`${__dirname}/convertChild.js`, { cwd: __dirname });
-const exportFork = fork(`${__dirname}/convertChild.js`, { cwd: __dirname });
+//one process for each core, besides the main core
+const numCores = Math.min(1, process.os.cpus().length - 1);
+const forks = _.range(numCores).map(() => fork(`${__dirname}/convertChild.js`, { cwd: __dirname }));
+let coreIndex = 0;
 
 process.on('exit', () => {
-  importFork.kill('SIGHUP');
-  exportFork.kill('SIGHUP');
+  forks.forEach(fork => fork.kill('SIGHUP'));
 });
 
 // Run an external command and return the data in the specified output file
 //commmand is 'import' or 'export'
 const runCommand = (command, inputFile, outputFile) => {
-  const fork = command === 'import' ? importFork : exportFork;
+  const fork = forks[coreIndex];
+  coreIndex = (coreIndex + 1) % numCores;
 
   return new Promise((resolve, reject) => {
     const procId = uuid.v4();

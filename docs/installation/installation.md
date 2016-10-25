@@ -20,7 +20,7 @@ Easiest way to get set up, using mocked authentication. In this installation, th
 
 `npm install`
 
-`npm run start`
+`npm run start-instance`
 
 ### In a Docker Container
 
